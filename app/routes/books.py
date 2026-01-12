@@ -19,7 +19,7 @@ def create_book(
     data: BookCreate, db: Session = Depends(get_db), 
     user_id:int = Depends(get_current_user)
 ):
-    book = Book(**data.dict(), user_id=user_id)
+    book = Book(**data.model_dump(), user_id=user_id)
     db.add(book)
     db.commit()
     return book
@@ -42,7 +42,7 @@ def update_book(
     book = db.query(Book).filter(Book.id == book_id, Book.user_id == user_id).first()
 
     if book:
-        for k, v in data.dict().items():
+        for k, v in data.model_dump().items():
             setattr(book, k, v)
         db.commit()
     
