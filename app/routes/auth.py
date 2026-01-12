@@ -16,7 +16,7 @@ def get_db():
         db.close()
 
 
-@router.post("/register", tags=["Auth"])
+@router.post("/register", tags=["Auth"], summary="Register a new user")
 def register(data: UserCreate, db: SessionLocal = Depends(get_db)):
     if db.query(User).filter(User.email == data.email).first():
         raise HTTPException(status_code=400, detail="Email already exists")
@@ -30,7 +30,7 @@ def register(data: UserCreate, db: SessionLocal = Depends(get_db)):
     return {"message": "User registered successfully"}
 
 
-@router.post("/login", tags=["Auth"])
+@router.post("/login", tags=["Auth"], summary="Login a user")
 def login(data: UserLogin, db: SessionLocal = Depends(get_db)):
     user = db.query(User).filter(User.email == data.email).first()
 

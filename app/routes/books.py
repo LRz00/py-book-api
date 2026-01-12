@@ -5,7 +5,7 @@ from app.models.book import Book
 from app.schemas.book import BookCreate
 from app.dependencies import get_current_user
 
-router = APIRouter(prefix="/books")
+router = APIRouter(prefix="/books", tags=["Books"])
 
 def get_db():
     db = SessionLocal()
@@ -14,7 +14,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/")
+@router.post("/", summary="Create a new book", tags=["Books"])
 def create_book(
     data: BookCreate, db: Session = Depends(get_db), 
     user_id:int = Depends(get_current_user)
@@ -24,7 +24,7 @@ def create_book(
     db.commit()
     return book
 
-@router.get("/")
+@router.get("/", summary="Get all books", tags=["Books"])
 def get_books(
     user_id: int = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -32,7 +32,7 @@ def get_books(
     return db.query(Book).filter(Book.user_id == user_id).all()
 
 
-@router.put("/{book_id}")
+@router.put("/{book_id}", summary="Update a book", tags=["Books"])
 def update_book(
     book_id: int,
     data: BookCreate,
@@ -48,7 +48,7 @@ def update_book(
     
     return book
 
-@router.delete("/{book_id}")
+@router.delete("/{book_id}", summary="Delete a book", tags=["Books"])
 def delete_book(
     book_id: int,
     user_id: int = Depends(get_current_user),
