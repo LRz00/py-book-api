@@ -1,7 +1,6 @@
 from passlib.context import CryptContext
-from jose import jwt
+from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from fastapi.exceptions import HTTPException
 
 SECRET = "secret"
 ALGORITHM = "HS256"
@@ -18,7 +17,7 @@ def veryfy_password(plain_password: str, hashed_password: str):
 def create_token(user_id: int):
     payload = {
         "sub": str(user_id),
-        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        "exp": datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     }
 
     return jwt.encode(payload, SECRET, algorithm=ALGORITHM)    
